@@ -56,3 +56,9 @@ button:focus-visible {
   align-items: center;
   min-height: 100dvh;
 }
+
+#controller {
+  position: absolute;
+  left: -999px;
+  transform: scale(0);
+}

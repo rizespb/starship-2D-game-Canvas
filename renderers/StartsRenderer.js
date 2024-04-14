@@ -1,4 +1,4 @@
-import { getRandomInt } from './utils';
+import { getRandomInt } from '../utils';
 
 // Генератор звезд для фона
 export class StartsRenderer {
@@ -17,6 +17,7 @@ export class StartsRenderer {
 
     for (let y = 0; y < this.sceneHeight; y++) {
       for (let x = 0; x < this.sceneWidth; x++) {
+        // Увеличивая максимальное значение, в пределах которого считаем рандом, будем уменьшать плотность астероидов
         const random = getRandomInt(1000);
 
         if (random === 100) {
@@ -26,6 +27,7 @@ export class StartsRenderer {
     }
   };
 
+  // Функция отрисовки одной звезды
   renderStar = (x, y) => {
     this.ctx.fillStyle = '#fff';
     // x,y - координаты откуда начать рисовать

@@ -153,7 +153,28 @@ export function initGame() {
     startsRenderer.moveStars,
     (_, currentState) => starshipRenderer.renderStarship(currentState.posX, currentState.posY, STARSHIP_COEF),
     asteroidsRenderer.moveAsteroids,
-    shotRenderer.moveShots,
+    () => {
+      // В moveShots мы передаем колбэк, который будет вызван после того, как будут перерисованы все выстрелы
+      shotRenderer.moveShots(() => {
+        shotRenderer.shots.forEach((shot) => {
+          // Для каждого выстрела находим астероид, который в новом кадре пересекается с выстрелом
+          const foundAsteroidIndex = asteroidsRenderer.asteroids.findIndex((asteroid) => {
+            return (
+              shot.x >= asteroid.x && shot.x <= asteroid.x + 10 && shot.y >= asteroid.y && shot.y <= asteroid.y + 80
+            );
+          });
+
+          // Если найден астероид, который в кадре занимает тоже положение, что и один из выстрелов, то перемещаем астероид по горизонтальной оси x в начальное положение (вправо)
+          if (foundAsteroidIndex > -1) {
+            const asteroid = asteroidsRenderer.asteroids[foundAsteroidIndex];
+            asteroid.x = asteroid.initX;
+
+            // Выстрел в этот момент перемещаем за пределы сцены вниз
+            shot.y = SCENE_HEIGHT + 10;
+          }
+        });
+      });
+    },
   ];
 
   // В итгое игровой таймер будет рекурсивно вызывать сам себя
